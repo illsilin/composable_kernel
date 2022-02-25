@@ -1,6 +1,8 @@
 #ifndef CK_ELEMENT_WISE_OPERATION_HPP
 #define CK_ELEMENT_WISE_OPERATION_HPP
 
+#include "data_type.hpp"
+
 namespace ck {
 namespace tensor_operation {
 namespace element_wise {
@@ -148,7 +150,7 @@ struct AddHardswishAdd
 template <typename Y, typename X, bool HasDividing = false>
 struct UnaryIdentic
 {
-    __host__ __device__ UnaryIdentic(const index_t divider = 1) { (void)divider; };
+    __host__ __device__ UnaryIdentic(const int32_t divider = 1) { (void)divider; };
 
     __host__ __device__ constexpr void operator()(Y& y, const X& x) const
     {
@@ -159,20 +161,20 @@ struct UnaryIdentic
 template <typename Y, typename X>
 struct UnaryIdentic<Y, X, true>
 {
-    __host__ __device__ UnaryIdentic(const index_t divider = 1) { divider_ = divider; };
+    __host__ __device__ UnaryIdentic(const int32_t divider = 1) { divider_ = divider; };
 
     __host__ __device__ constexpr void operator()(Y& y, const X& x) const
     {
         y = type_convert<Y>(x) / type_convert<Y>(divider_);
     };
 
-    index_t divider_ = 1;
+    int32_t divider_ = 1;
 };
 
 template <typename Y, typename X, bool HasDividing = false>
 struct UnarySquare
 {
-    __host__ __device__ UnarySquare(const index_t divider = 1) { (void)divider; };
+    __host__ __device__ UnarySquare(const int32_t divider = 1) { (void)divider; };
 
     __host__ __device__ constexpr void operator()(Y& y, const X& x) const
     {
@@ -183,14 +185,14 @@ struct UnarySquare
 template <typename Y, typename X>
 struct UnarySquare<Y, X, true>
 {
-    __host__ __device__ UnarySquare(const index_t divider = 1) { divider_ = divider; };
+    __host__ __device__ UnarySquare(const int32_t divider = 1) { divider_ = divider; };
 
     __host__ __device__ constexpr void operator()(Y& y, const X& x) const
     {
         y = type_convert<Y>(x) * type_convert<Y>(x) / type_convert<Y>(divider_);
     };
 
-    index_t divider_ = 1;
+    int32_t divider_ = 1;
 };
 
 static inline __device__ half_t abs(half_t x) { return __habs(x); };
@@ -199,7 +201,7 @@ static inline __device__ half_t sqrtf(half_t x) { return hsqrt(x); };
 template <typename Y, typename X, bool HasDividing = false>
 struct UnaryAbs
 {
-    __host__ __device__ UnaryAbs(const index_t divider = 1) { (void)divider; };
+    __host__ __device__ UnaryAbs(const int32_t divider = 1) { (void)divider; };
 
     __host__ __device__ constexpr void operator()(Y& y, const X& x) const
     {
@@ -210,20 +212,20 @@ struct UnaryAbs
 template <typename Y, typename X>
 struct UnaryAbs<Y, X, true>
 {
-    __host__ __device__ UnaryAbs(const index_t divider = 1) { divider_ = divider; };
+    __host__ __device__ UnaryAbs(const int32_t divider = 1) { divider_ = divider; };
 
     __host__ __device__ constexpr void operator()(Y& y, const X& x) const
     {
         y = abs(type_convert<Y>(x) / type_convert<Y>(divider_));
     };
 
-    index_t divider_ = 1;
+    int32_t divider_ = 1;
 };
 
 template <typename Y, typename X>
 struct UnarySqrt
 {
-    __host__ __device__ UnarySqrt(const index_t divider = 1) { (void)divider; };
+    __host__ __device__ UnarySqrt(const int32_t divider = 1) { (void)divider; };
 
     __host__ __device__ void operator()(Y& y, const X& x) const { y = sqrtf(type_convert<Y>(x)); };
 };
